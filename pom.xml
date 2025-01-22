@@ -12,7 +12,7 @@
 	<artifactId>product-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product-microservice</name>
-	<description>Microservice for handling user</description>
+	<description>Microservice for handling products</description>
 	<url/>
 	<licenses>
 		<license/>
