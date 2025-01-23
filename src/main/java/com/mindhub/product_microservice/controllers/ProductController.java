@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -33,4 +33,21 @@ public class ProductController {
                                                                      @RequestBody ProductDtoInput productDtoInput) {
         return productService.updateProduct(productId, productDtoInput);
     }
+
+    @GetMapping("/{productId}/validate-stock")
+    public ResponseEntity<Boolean> validateStock(
+            @PathVariable Long productId,
+            @RequestParam Integer quantity) {
+        boolean isValid = productService.validateStock(productId, quantity);
+        return ResponseEntity.ok(isValid);
+    }
+
+    @PostMapping("/{productId}/reduce-stock")
+    public ResponseEntity<Void> reduceStock(
+            @PathVariable Long productId,
+            @RequestBody Integer quantity) {
+        productService.reduceStock(productId, quantity);
+        return ResponseEntity.ok().build();
+    }
+
 }

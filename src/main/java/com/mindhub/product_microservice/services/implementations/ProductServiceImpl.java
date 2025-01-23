@@ -74,4 +74,21 @@ public class ProductServiceImpl implements ProductService {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public boolean validateStock(Long productId, Integer quantity) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: " + productId));
+        return product.getStock() >= quantity;    }
+
+    @Override
+    public void reduceStock(Long productId, Integer quantity) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: " + productId));
+        if (product.getStock() < quantity) {
+            throw new RuntimeException("Insufficient stock for product ID: " + productId);
+        }
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
+    }
 }

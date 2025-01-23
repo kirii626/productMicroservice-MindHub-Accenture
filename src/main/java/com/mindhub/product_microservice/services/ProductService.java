@@ -15,4 +15,8 @@ public interface ProductService {
     ResponseEntity<ApiResponse<ProductDtoOutput>> createProduct( ProductDtoInput productDtoInput);
 
     ResponseEntity<ApiResponse<ProductDtoOutput>> updateProduct(@Valid Long productId, ProductDtoInput productDtoInput);
+
+    boolean validateStock(Long productId, Integer quantity);
+
+    void reduceStock(Long productId, Integer quantity);
 }
