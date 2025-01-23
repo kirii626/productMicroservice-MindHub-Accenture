@@ -12,9 +12,6 @@ public class ProductDtoOutput {
 
     private Integer stock;
 
-    public ProductDtoOutput() {
-    }
-
     public ProductDtoOutput(Long id, String name, String description, Double price, Integer stock) {
         this.id = id;
         this.name = name;
