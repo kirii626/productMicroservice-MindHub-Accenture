@@ -29,13 +29,11 @@ public class ProductServiceImpl implements ProductService {
     public ApiResponse<List<ProductDtoOutput>> getAllProducts() {
         List<ProductDtoOutput> productDtoOutputList = productMapper.toDtoList(productRepository.findAll());
 
-        // Crear la respuesta con el mensaje y la lista de productos
         ApiResponse<List<ProductDtoOutput>> response = new ApiResponse<>(
                 "Products retrieved successfully",
                 productDtoOutputList
         );
 
-        // Retornar la respuesta
         return response;
     }
 
