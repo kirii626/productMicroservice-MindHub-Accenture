@@ -28,7 +28,7 @@ public class ProductController {
         return productService.createProduct(productDtoInput);
     }
 
-    @PutMapping("/productId")
+    @PutMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductDtoOutput>> editProduct(@Valid @PathVariable Long productId,
                                                                      @RequestBody ProductDtoInput productDtoInput) {
         return productService.updateProduct(productId, productDtoInput);

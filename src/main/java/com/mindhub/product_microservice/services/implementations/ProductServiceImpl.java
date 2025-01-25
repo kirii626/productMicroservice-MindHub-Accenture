@@ -7,6 +7,7 @@ import com.mindhub.product_microservice.models.ProductEntity;
 import com.mindhub.product_microservice.repositories.ProductRepository;
 import com.mindhub.product_microservice.services.ProductService;
 import com.mindhub.product_microservice.services.mappers.ProductMapper;
+import com.mindhub.product_microservice.services.validations.ValidProductFields;
 import com.mindhub.product_microservice.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ValidProductFields validProductFields;
 
 
     @Override
@@ -52,18 +56,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<ApiResponse<ProductDtoOutput>> updateProduct(Long productId, ProductDtoInput productDtoInput) {
-        if (productId == null || productId<=0) {
-            throw new IllegalArgumentException("Invalid product ID: "+productId);
-        }
+        ProductEntity existingProduct = validProductFields.validateAndGetProduct(productId);
 
-        ProductEntity existingProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundExc("Product not found by ID: "+ productId));
-
-        existingProduct.setName(productDtoInput.getName());
-        existingProduct.setDescription(productDtoInput.getDescription());
-        existingProduct.setPrice(productDtoInput.getPrice());
-        existingProduct.setStock(productDtoInput.getStock());
-
+        updateProductFields(existingProduct, productDtoInput);
         ProductEntity updatedProduct = productRepository.save(existingProduct);
         ProductDtoOutput productDtoOutput = productMapper.toDto(updatedProduct);
 
@@ -79,7 +74,8 @@ public class ProductServiceImpl implements ProductService {
     public boolean validateStock(Long productId, Integer quantity) {
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: " + productId));
-        return product.getStock() >= quantity;    }
+        return product.getStock() >= quantity;
+    }
 
     @Override
     public void reduceStock(Long productId, Integer quantity) {
@@ -90,5 +86,12 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setStock(product.getStock() - quantity);
         productRepository.save(product);
+    }
+
+    private void updateProductFields(ProductEntity productEntity, ProductDtoInput productDtoInput) {
+        productEntity.setName(productDtoInput.getName());
+        productEntity.setDescription(productDtoInput.getDescription());
+        productEntity.setPrice(productDtoInput.getPrice());
+        productEntity.setStock(productDtoInput.getStock());
     }
 }
