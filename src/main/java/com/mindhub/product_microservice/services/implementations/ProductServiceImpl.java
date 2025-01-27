@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ApiResponse<ProductDtoOutput>> createProduct(ProductDtoInput productDtoInput) {
         ProductEntity productEntity = productMapper.toEntity(productDtoInput);
         ProductEntity savedProduct = productRepository.save(productEntity);
@@ -55,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ApiResponse<ProductDtoOutput>> updateProduct(Long productId, ProductDtoInput productDtoInput) {
         ProductEntity existingProduct = validProductFields.validateAndGetProduct(productId);
 
@@ -78,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void reduceStock(Long productId, Integer quantity) {
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: " + productId));
@@ -88,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     private void updateProductFields(ProductEntity productEntity, ProductDtoInput productDtoInput) {
         productEntity.setName(productDtoInput.getName());
         productEntity.setDescription(productDtoInput.getDescription());
