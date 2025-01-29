@@ -92,6 +92,20 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public Double getProductPriceByProductId(Long productId) {
+        return productRepository.findById(productId)
+                .map(ProductEntity::getPrice)
+                .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: "+ productId));
+    }
+
+    @Override
+    public String getProductNameByProductId(Long productId) {
+        return productRepository.findById(productId)
+                .map(ProductEntity::getName)
+                .orElseThrow(() -> new ProductNotFoundExc("Product not found with ID: "+productId));
+    }
+
     @Transactional
     private void updateProductFields(ProductEntity productEntity, ProductDtoInput productDtoInput) {
         productEntity.setName(productDtoInput.getName());

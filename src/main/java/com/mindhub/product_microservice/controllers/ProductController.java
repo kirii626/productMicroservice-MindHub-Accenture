@@ -50,4 +50,16 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("{productId}/price")
+    public ResponseEntity<Double> getProductPrice(@PathVariable Long productId) {
+        Double price = productService.getProductPriceByProductId(productId);
+        return ResponseEntity.ok(price);
+    }
+
+    @GetMapping("/{productId}/name")
+    public ResponseEntity<String> getProductName(@PathVariable Long productId) {
+        String name = productService.getProductNameByProductId(productId);
+        return ResponseEntity.ok(name);
+    }
+
 }

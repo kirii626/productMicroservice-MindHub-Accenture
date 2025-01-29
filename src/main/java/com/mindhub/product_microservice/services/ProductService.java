@@ -19,4 +19,8 @@ public interface ProductService {
     boolean validateStock(Long productId, Integer quantity);
 
     void reduceStock(Long productId, Integer quantity);
+
+    Double getProductPriceByProductId(Long productId);
+
+    String getProductNameByProductId(Long productId);
 }
