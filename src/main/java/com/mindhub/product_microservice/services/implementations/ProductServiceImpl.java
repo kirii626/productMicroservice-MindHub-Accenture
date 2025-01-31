@@ -115,7 +115,6 @@ public class ProductServiceImpl implements ProductService {
             stockEventPublisher.sendStockReducedEvent(orderId);
             return true;
         } catch (Exception e) {
-            // 🔹 En caso de error, enviar evento de stock fallido
             stockEventPublisher.sendStockFailureEvent(orderId);
             return false;
         }
